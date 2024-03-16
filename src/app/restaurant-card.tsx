@@ -1,26 +1,20 @@
 import { Link, useNavigation } from "expo-router";
 import React, { useEffect, useState } from "react";
-import {
-  Pressable,
-  FlatList,
-  ScrollView,
-  Text,
-  View,
-  Dimensions,
-} from "react-native";
+import { FlatList, View, Text, Dimensions, Pressable } from "react-native";
+
 import { ClipPath, Defs, G, Path, Rect, Svg } from "react-native-svg";
 import { useAssets } from "expo-asset";
-
 import { Image } from "expo-image";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("screen");
-export default function Page() {
+function RestaurantCard() {
   const navigation = useNavigation();
+  const [search, setSearch] = useState("");
+
   const [assets] = useAssets([require("../../public/star.png")]);
-  const [mode, setMode] = useState("Delivery Now");
-  const [search, setSearch] = React.useState("");
   useEffect(() => {
     navigation.setOptions({
+      title: "manoosha - ❤️",
       headerSearchBarOptions: {
         onChangeText: (event) => setSearch(event.nativeEvent.text),
         placeholder: "Search",
@@ -34,80 +28,12 @@ export default function Page() {
   }, []);
   return (
     <FlatList
-      contentInsetAdjustmentBehavior="automatic"
-      data={[...new Array(100).keys()]}
-      contentContainerStyle={{ paddingTop: 10 }}
-      bounces={false}
-      ListHeaderComponent={() => (
-        <View className="gap-3">
-          <View className="flex-row w-full gap-2 px-4 items-center justify-around">
-            {["Delivery Now", "schedule", "Reservations"].map((_mode) => (
-              <Pressable
-                onPress={() => setMode(_mode)}
-                className={`p-2 flex-1 rounded-lg border ${
-                  mode === _mode
-                    ? "border-primary bg-primary/5"
-                    : "border-slate-300"
-                }`}
-              >
-                <Text
-                  className={`text-center ${
-                    mode === _mode
-                      ? "text-primary font-semibold"
-                      : "text-slate-800"
-                  }`}
-                >
-                  {_mode}
-                </Text>
-              </Pressable>
-            ))}
-          </View>
-          <View className="h-32 mb-3 items-center justify-center gap-2 ">
-            <ScrollView
-              horizontal
-              pagingEnabled
-              decelerationRate={0}
-              snapToAlignment="center"
-              snapToInterval={SCREEN_WIDTH}
-              showsHorizontalScrollIndicator={false}
-            >
-              {[...new Array(10).keys()].map((p) => (
-                <View style={{ width: SCREEN_WIDTH }} className="px-4">
-                  <Pressable className=" h-28 bg-slate-200 rounded-lg items-center justify-center">
-                    <Text className="text-slate-400">{p}</Text>
-                  </Pressable>
-                </View>
-              ))}
-            </ScrollView>
-            <View className="flex flex-row items-center justify-center gap-3">
-              <View className="w-2 h-2 rounded-full bg-primary"></View>
-              {[...new Array(10).keys()].map((p) => (
-                <View
-                  className={`${
-                    p === 9 ? "w-1.5 h-1.5" : "w-2 h-2"
-                  } rounded-full bg-primary/20`}
-                ></View>
-              ))}
-            </View>
-          </View>
-          <ScrollView
-            horizontal
-            className="h-20 "
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ gap: 10, paddingStart: 14 }}
-          >
-            {[...new Array(100).keys()].map((p) => (
-              <Pressable className="h-20 w-20 bg-slate-200 rounded-lg items-center justify-center">
-                <Text className="text-slate-400">{p}</Text>
-              </Pressable>
-            ))}
-          </ScrollView>
-        </View>
-      )}
+      data={[...new Array(10).keys()]}
       ListHeaderComponentStyle={{ paddingBottom: 10 }}
-      renderItem={(p) => (
-        <Link asChild key={`list-item-${p.item}`} href={"/restaurant-card"}>
-          <Pressable className="flex-row border-b border-slate-300 gap-3 py-5 px-2">
+      contentContainerStyle={{ paddingTop: 10, gap: 10 }}
+      ListHeaderComponent={(p) => (
+        <View className="gap-2">
+          <View className="flex-row gap-3 px-2">
             <View className="bg-slate-200 rounded-lg  h-20 w-20 flex-[0.2] items-center justify-center">
               <Text className="text-slate-400">{p.item}</Text>
             </View>
@@ -143,8 +69,50 @@ export default function Page() {
                 <Text className="text-sm text-[#4D008C]">5 Riyal</Text>
               </View>
             </View>
-            <View className="items-end justify-end flex-[0.2] ">
-              <Text className="text-slate-500 text-sm">0.6 km</Text>
+          </View>
+          <View
+            style={{ width: SCREEN_WIDTH * 0.97 }}
+            className="flex-row bg-white rounded-lg justify-between h-14 items-center mx-auto"
+          >
+            <View className="flex-[0.5] items-center">
+              <Svg width="12" height="15" viewBox="0 0 12 15" fill="none">
+                <Path
+                  d="M5.65664 0.510864C2.82603 0.510864 0.524414 2.76134 0.524414 5.52904C0.524414 7.54151 1.77084 9.68682 2.99049 11.3564C4.21013 13.0259 5.43051 14.2191 5.43051 14.2191C5.49066 14.2779 5.57221 14.3109 5.65723 14.3109C5.74225 14.3109 5.8238 14.2779 5.88395 14.2191C5.88395 14.2191 7.10433 13.0259 8.32398 11.3564C9.54362 9.68682 10.7889 7.54151 10.7889 5.52904C10.7889 2.76134 8.48725 0.510864 5.65664 0.510864ZM5.65664 1.13828C8.14054 1.13828 10.1472 3.10033 10.1472 5.52904C10.1472 7.28015 8.98792 9.36816 7.80187 10.9917C6.72912 12.4602 5.8517 13.3149 5.65664 13.5095C5.46123 13.3145 4.5851 12.4599 3.51259 10.9917C2.32654 9.36816 1.16609 7.28015 1.16609 5.52904C1.16609 3.10033 3.17273 1.13828 5.65664 1.13828Z"
+                  fill="#4D008C"
+                  stroke="#4D008C"
+                  stroke-width="0.5"
+                />
+                <Path
+                  d="M5.65679 3.33313C4.42054 3.33313 3.41211 4.32031 3.41211 5.52909C3.41211 6.73787 4.42054 7.72505 5.65679 7.72505C6.89304 7.72505 7.90265 6.73787 7.90265 5.52909C7.90265 4.32031 6.89304 3.33313 5.65679 3.33313ZM5.65679 3.96055C6.54634 3.96055 7.26098 4.65931 7.26098 5.52909C7.26098 6.39887 6.54634 7.09763 5.65679 7.09763C4.76724 7.09763 4.05378 6.39887 4.05379 5.52909C4.05379 4.65931 4.76724 3.96055 5.65679 3.96055Z"
+                  fill="#4D008C"
+                />
+              </Svg>
+              <Text className="text-[#4D008C] text-sm">0.6 km</Text>
+            </View>
+            <View className="h-8 w-1 bg-slate-200 flex-[0.005]"></View>
+            <View className="flex-[0.5] items-center">
+              <Svg width="12" height="13" viewBox="0 0 12 13" fill="none">
+                <Path
+                  d="M5.99808 12.3214C9.28662 12.3214 12.001 9.70275 12.001 6.53571C12.001 3.36868 9.28082 0.75 5.99228 0.75C2.70953 0.75 0.000976562 3.36868 0.000976562 6.53571C0.000976562 9.70275 2.71533 12.3214 5.99808 12.3214ZM5.99808 11.1688C3.33592 11.1688 1.20736 9.10403 1.20736 6.53571C1.20736 3.96739 3.33592 1.90826 5.99228 1.90826C8.65443 1.90826 10.7946 3.96739 10.8004 6.53571C10.8062 9.10403 8.66023 11.1688 5.99808 11.1688ZM3.07493 7.24074H5.99228C6.25907 7.24074 6.46207 7.0449 6.46207 6.79311V3.13367C6.46207 2.88187 6.25907 2.68603 5.99228 2.68603C5.73708 2.68603 5.53408 2.88187 5.53408 3.13367V6.34547H3.07493C2.81393 6.34547 2.61093 6.54131 2.61093 6.79311C2.61093 7.0449 2.81393 7.24074 3.07493 7.24074Z"
+                  fill="#4D008C"
+                />
+              </Svg>
+              <Text className="text-[#4D008C] text-sm">Closes at 05.59 AM</Text>
+            </View>
+          </View>
+        </View>
+      )}
+      contentInsetAdjustmentBehavior="automatic"
+      renderItem={(p) => (
+        <Link asChild href={"#"}>
+          <Pressable
+            style={{ width: SCREEN_WIDTH * 0.9 }}
+            className="h-56 mx-auto bg-white rounded-lg px-2 pt-1"
+          >
+            <View className="bg-slate-200 rounded-lg flex-[0.9]"></View>
+            <View className="flex-row justify-between items-center flex-[0.2]">
+              <Text>Grand Share Box</Text>
+              <Text>SAR 275.00</Text>
             </View>
           </Pressable>
         </Link>
@@ -152,3 +120,5 @@ export default function Page() {
     />
   );
 }
+
+export default RestaurantCard;
