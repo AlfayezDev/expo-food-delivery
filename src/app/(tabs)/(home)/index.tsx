@@ -16,7 +16,7 @@ import { Image } from "expo-image";
 const { width: SCREEN_WIDTH } = Dimensions.get("screen");
 export default function Page() {
   const navigation = useNavigation();
-  const [assets] = useAssets([require("../../public/star.png")]);
+  const [assets] = useAssets([require("../../../../public/star.png")]);
   const [mode, setMode] = useState("Delivery Now");
   const [search, setSearch] = React.useState("");
   useEffect(() => {
